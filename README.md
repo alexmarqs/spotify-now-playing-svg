@@ -1,4 +1,4 @@
-# Spotify Playing Now Svg Generator
+# Spotify Playing Now Svg Generator 🚀 🎵
 
 This repository contains
 
