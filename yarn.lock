@@ -15,10 +15,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.31.tgz#72286bd33d137aa0d152d47ec7c1762563d34055"
   integrity sha512-vFHy/ezP5qI0rFgJ7aQnjDXwAMrG0KqqIH7tQG5PPv3BWBayOPIQNBjVc/P6hhdZfMx51REc6tfDNXHUio893g==
 
-"@types/spotify-api@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@types/spotify-api/-/spotify-api-0.0.7.tgz#1a6ed74e565bb40e3d0e562a9d5845980743ec83"
-  integrity sha512-X0ESmph2vgcaY++YMDlls9eZG2iApzJePWLF+lPQR+rg4+heq/vsY9klDKeyhYQc2aDNKf1eD9T8e/jGCSsRzQ==
+"@types/spotify-api@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@types/spotify-api/-/spotify-api-0.0.8.tgz#e71c6c963163f92dd20604102cab6517e620944b"
+  integrity sha512-ChhUuVkIcf1lb2sD2R5JmNyCIOtl0AzqQ6Id4bZDNRo4AuDo2O9mUnh6Dmn3EB5JLGfWi0qdxmP/6Zvu7L/Rpw==
 
 "@vercel/node@^1.9.0":
   version "1.9.0"
@@ -91,6 +91,23 @@ node-fetch@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
+
+preact-render-to-string@^5.1.12:
+  version "5.1.12"
+  resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-5.1.12.tgz#3d258a177ef8947f768dd0f2c56629e7fda2dc39"
+  integrity sha512-nXVCOpvepSk9AfPwqS08rf9NDOCs8eeYYlG+7tE85iP5jVyjz+aYb1BYaP5SPdfVWVrzI9L5NzxozUvKaD96tA==
+  dependencies:
+    pretty-format "^3.8.0"
+
+preact@^10.5.12:
+  version "10.5.12"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.12.tgz#6a8ee8bf40a695c505df9abebacd924e4dd37704"
+  integrity sha512-r6siDkuD36oszwlCkcqDJCAKBQxGoeEGytw2DGMD5A/GGdu5Tymw+N2OBXwvOLxg6d1FeY8MgMV3cc5aVQo4Cg==
+
+pretty-format@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-3.8.0.tgz#bfbed56d5e9a776645f4b1ff7aa1a3ac4fa3c385"
+  integrity sha1-v77VbV6ad2ZF9LH/eqGjrE+jw4U=
 
 source-map-support@^0.5.17:
   version "0.5.19"

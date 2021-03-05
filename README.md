@@ -1,10 +1,12 @@
 # Spotify Playing Now API Svg Generator 🚀 🎵
 
-This repository contains
+Generate a dynamic SVG image for what you are listening right now in your Spotify account, via a serverless API of course!. After deploying to Vercel (see instructions below) you will be able to embedded the dynamic svg in your github readme file (or other markdown file):
 
-Built using:
+Built with:
 
 - Typescript
+- Render JSX/TSX to an HTML string with support of Preact (you can use other alternatives!)
+- SVG with foreign object
 - Vercel serverless functions (AWS lambda behind the scenes)
 - Spotify API
 
@@ -53,9 +55,3 @@ vercel --prod
 
 Note (optional):
 During the development/test you can expose your serverless API to the world using [ngrok](https://ngrok.com/) through your local machine. This is usefull when you do not want to deploy the production yet and you need a public api url.
-
-## How to include this in a Github Profile Readme (or any other `.md`)?
-
-## Inspirations:
-
-Inspired by

@@ -2,19 +2,22 @@
   "name": "spotify-now-playing-svg-gen",
   "private": true,
   "version": "1.0.0",
-  "description": "Spotify Now Playing Serverless API SVG Generator (e.g. for github readme markdown)",
+  "description": "Spotify Now Playing Serverless API SVG Generator",
   "main": "index.js",
   "scripts": {
     "start": "vercel dev",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "typescript-vercel-version": "tsc --version"
   },
   "license": "MIT",
   "devDependencies": {
     "@types/node-fetch": "^2.5.8",
-    "@types/spotify-api": "^0.0.7",
+    "@types/spotify-api": "^0.0.8",
     "@vercel/node": "^1.9.0"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "preact": "^10.5.12",
+    "preact-render-to-string": "^5.1.12"
   }
 }
