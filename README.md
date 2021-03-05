@@ -1,6 +1,12 @@
 # Spotify Playing Now API Svg Generator 🚀 🎵
 
-Generate a dynamic SVG image for what you are listening right now in your Spotify account, via a serverless API of course!. After deploying to Vercel (see instructions below) you will be able to embedded the dynamic svg in your github readme file (or other markdown file):
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Falexmarqs%2Fspotify-now-playing-svg)
+
+Generate a dynamic SVG image for what you are listening right now in your Spotify account, via a serverless API of course!. After deploying to Vercel (see instructions below) you will be able to embed the dynamic svg in your github readme file (or other markdown file):
+
+`<img src="<YOUR_VERCEL_APP_URL>/api" width="460" height="60">`
+
+<img src="https://spotify-now-playing-svg.vercel.app/api" width="460" height="60">
 
 Built with:
 
