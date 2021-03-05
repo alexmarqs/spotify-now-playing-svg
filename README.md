@@ -6,6 +6,8 @@ Generate a dynamic SVG image for what you are listening right now in your Spotif
 
 `<img src="<YOUR_VERCEL_APP_URL>/api" width="460" height="60">`
 
+My live example:
+
 <img src="https://spotify-now-playing-svg.vercel.app/api" width="460" height="60">
 
 Built with:
