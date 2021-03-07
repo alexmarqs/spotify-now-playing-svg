@@ -10,12 +10,13 @@ My live example:
 
 <img src="https://spotify-now-playing-svg.vercel.app/api" width="460" height="60">
 
-Built with:
+Built using:
 
 - Typescript
 - Render JSX/TSX to an HTML string with support of Preact (you can use other alternatives!)
 - SVG with foreign object
 - Vercel serverless functions (AWS lambda behind the scenes)
+- Vercel CDN
 - Spotify API
 
 ## Set up
@@ -47,7 +48,7 @@ To set up a Vercel project for this app, run:
 vercel
 ```
 
-Go to your project seetings and add the required environment variables (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and SPOTIFY_REFRESH_TOKEN). More info: https://vercel.com/docs/environment-variables.
+Go to your project settings and add the required environment variables (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and SPOTIFY_REFRESH_TOKEN). More info: https://vercel.com/docs/environment-variables.
 
 To test locally and replicate your Vercel deployment environment without requiring a deploy each time a change is made, execute:
 
@@ -62,4 +63,4 @@ vercel --prod
 ```
 
 Note (optional):
-During the development/test you can expose your serverless API to the world using [ngrok](https://ngrok.com/) through your local machine. This is usefull when you do not want to deploy the production yet and you need a public api url.
+During the development/test you can expose your serverless API to the world using [ngrok](https://ngrok.com/) through your local machine.
