@@ -21,7 +21,7 @@ Built using:
 
 ## Architecture
 
-TBD
+![Diagram architecture](/docs/diagram.png)
 
 ## Set up
 
