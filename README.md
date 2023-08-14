@@ -67,4 +67,4 @@ vercel --prod
 ```
 
 Note (optional):
-During the development/test you can expose your serverless API to the world using [ngrok](https://ngrok.com/) through your local machine.
+- During the development/test you can expose your serverless API to the world using [ngrok](https://ngrok.com/) through your local machine.
