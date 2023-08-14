@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "es2020",
+    "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2017",
     "jsx": "react",
