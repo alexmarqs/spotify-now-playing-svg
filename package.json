@@ -3,21 +3,21 @@
   "private": true,
   "version": "1.0.0",
   "description": "Spotify Now Playing Serverless API SVG Generator",
-  "main": "index.js",
   "scripts": {
     "start": "vercel dev",
     "deploy": "vercel --prod",
-    "typescript-vercel-version": "tsc --version"
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node-fetch": "^2.5.8",
-    "@types/spotify-api": "^0.0.8",
-    "@vercel/node": "^1.9.0"
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
-    "preact": "^10.5.12",
-    "preact-render-to-string": "^5.1.12"
+    "preact": "^10.19.0",
+    "preact-render-to-string": "^5.2.0"
   }
 }

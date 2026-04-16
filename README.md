@@ -1,70 +1,118 @@
-# Spotify Playing Now API Svg Generator (tracks and episodes) 🚀 🎵
+# Spotify Playing Now SVG Generator 🎵
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Falexmarqs%2Fspotify-now-playing-svg)
 
-Generate a dynamic SVG image for what you are listening right now in your Spotify account, via a serverless API of course!. After deploying to Vercel (see instructions below) you will be able to embed the dynamic svg in your github readme file (or other markdown file):
+A serverless Edge Function that generates a dynamic SVG showing what you're currently listening to on Spotify. Embed it in your GitHub README or any markdown file.
 
-`<img src="<YOUR_VERCEL_APP_URL>/api" width="460" height="60">`
+```html
+<img src="<YOUR_VERCEL_APP_URL>/api" width="460" height="60">
 
-My live example:
+<!-- dark theme -->
+<img src="<YOUR_VERCEL_APP_URL>/api?theme=dark" width="460" height="60">
+```
+
+### Demo
+
+Light theme:
+
+<img src="https://spotify-now-playing-svg.vercel.app/api?demo=true" width="460" height="60">
+
+Dark theme:
+
+<img src="https://spotify-now-playing-svg.vercel.app/api?demo=true&theme=dark" width="460" height="60">
+
+### Live
 
 <img src="https://spotify-now-playing-svg.vercel.app/api" width="460" height="60">
 
-Built using:
+## Built with
 
-- Typescript
-- Render JSX/TSX to an HTML string with support of Preact (you can use other alternatives!)
-- SVG with foreign object
-- Vercel serverless functions (AWS lambda behind the scenes)
-- Vercel CDN
-- Spotify API
+- TypeScript (strict mode)
+- Preact — renders JSX components to SVG strings
+- SVG with `<foreignObject>` for rich HTML/CSS inside SVG
+- Vercel Edge Functions (zero cold start)
+- Spotify Web API
 
 ## Architecture
 
 ![Diagram architecture](/docs/diagram.png)
 
-## Set up
+## Prerequisites
 
-The required environment variables for this app are in the `.env.example` (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and SPOTIFY_REFRESH_TOKEN). To set up these variables check the following steps:
+> **Important:** As of late 2024, the Spotify Web API requires the **app owner** to have an active **Spotify Premium** subscription. If your subscription lapses, the now-playing endpoint will return 403. It can take a few hours to propagate after re-subscribing.
 
-Create a Spotify developer app (more info [here](https://developer.spotify.com/documentation/general/guides/app-settings/) and [here](https://developer.spotify.com/documentation/general/guides/authorization-guide/)):
+## Setup
 
-- Create a **spotify application**;
-- Get the **SPOTIFY_CLIENT_ID** and **SPOTIFY_CLIENT_SECRET**;
-- Edit settings and add `http://localhost/callback/` as your **Redirect URI**;
-- For request authorization (log in and authorize access) navigate to: `https://accounts.spotify.com/authorize?client_id={SPOTIFY_CLIENT_ID}&response_type=code&scope=user-read-currently-playing&redirect_uri=http://localhost/callback/`. You will be redirected back to your specified redirect uri. The response query string should contains an authorization **CODE** (e.g. `https://example.com/callback?code={CODE}`);
-- Create a **BASE64** encoded string that contains the client ID and client secret key in the following format: `SPOTIFY_CLIENT_ID:SPOTIFY_CLIENT_SECRET`, example: `1r8g4x9a3t3o5g7b5z4:2t8g4x9a3t3o5g7b5p8`. You can use this [tool](https://www.base64encode.org/) to encode it online;
-- Run the following curl command to : `curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: Basic {BASE64}" -d "grant_type=authorization_code&redirect_uri=http://localhost/callback/&code={CODE}" https://accounts.spotify.com/api/token`. This will return a JSON response containing the **SPOTIFY_REFRESH_TOKEN**. This token is valid indefinitely unless you revoke access;
+The required environment variables are listed in `.env.example`:
 
-## Deployment instructions
+- `SPOTIFY_CLIENT_ID`
+- `SPOTIFY_CLIENT_SECRET`
+- `SPOTIFY_REFRESH_TOKEN`
 
-**Assumptions:** You already have a Vercel account (if not, create one)
+### Getting your Spotify credentials
 
-Install Vercel globally to be able to run the project and deploy it later.
+1. Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) and **create a new app**
+2. Copy your **Client ID** and **Client Secret**
+3. In the app settings, add `http://localhost/callback/` as a **Redirect URI**
+4. Authorize your app by navigating to:
 
-```
+   ```
+   https://accounts.spotify.com/authorize?client_id={SPOTIFY_CLIENT_ID}&response_type=code&scope=user-read-currently-playing&redirect_uri=http://localhost/callback/
+   ```
+
+   After logging in, you'll be redirected to `http://localhost/callback/?code={CODE}`. Copy the `CODE` from the URL.
+
+5. Exchange the code for a refresh token:
+
+   ```bash
+   curl -X POST https://accounts.spotify.com/api/token \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -H "Authorization: Basic $(echo -n 'SPOTIFY_CLIENT_ID:SPOTIFY_CLIENT_SECRET' | base64)" \
+     -d "grant_type=authorization_code&redirect_uri=http://localhost/callback/&code={CODE}"
+   ```
+
+   The response JSON contains your `refresh_token`. This token is valid indefinitely unless you revoke access.
+
+## Deployment
+
+Install the Vercel CLI:
+
+```bash
 npm install -g vercel
 ```
 
-To set up a Vercel project for this app, run:
+Link and set up the project:
 
-```
+```bash
 vercel
 ```
 
-Go to your project settings and add the required environment variables (SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET and SPOTIFY_REFRESH_TOKEN). More info: https://vercel.com/docs/environment-variables.
+Add your environment variables in [Vercel Project Settings](https://vercel.com/docs/environment-variables), or via CLI:
 
-To test locally and replicate your Vercel deployment environment without requiring a deploy each time a change is made, execute:
-
-```
-vercel dev
-```
-
-To create a deployment for a production environemnt, execute:
-
-```
-vercel --prod
+```bash
+vercel env add SPOTIFY_CLIENT_ID
+vercel env add SPOTIFY_CLIENT_SECRET
+vercel env add SPOTIFY_REFRESH_TOKEN
 ```
 
-Note (optional):
-- During the development/test you can expose your serverless API to the world using [ngrok](https://ngrok.com/) through your local machine.
+### Local development
+
+Pull env vars and start the dev server:
+
+```bash
+vercel env pull .env.local
+npm start
+```
+
+### Production
+
+```bash
+npm run deploy
+```
+
+## Query parameters
+
+| Parameter | Values | Default | Description |
+|-----------|--------|---------|-------------|
+| `theme` | `light`, `dark` | `light` | Card color theme |
+| `demo` | `true` | — | Show sample data (no Spotify API call) |

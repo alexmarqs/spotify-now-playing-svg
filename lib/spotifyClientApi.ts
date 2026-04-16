@@ -1,20 +1,42 @@
 import spotifyConfig from './spotifyConfig';
-import fetch from 'node-fetch';
 
+// Spotify API types (minimal, only what we need)
 interface SpotifyAuthToken {
   access_token: string;
 }
 
-interface SpotifyTrackInfo {
+interface SpotifyImage {
+  url: string;
+  height: number;
+  width: number;
+}
+
+interface SpotifyTrack {
+  name: string;
+  artists: { name: string }[];
+  album: { images: SpotifyImage[] };
+}
+
+interface SpotifyEpisode {
+  name: string;
+  show: { name: string; publisher: string };
+  images: SpotifyImage[];
+}
+
+interface SpotifyCurrentlyPlaying {
+  is_playing: boolean;
+  currently_playing_type: 'track' | 'episode' | 'ad' | 'unknown';
+  item: SpotifyTrack | SpotifyEpisode | null;
+}
+
+export interface SpotifyTrackInfo {
   isPlaying: boolean;
   title: string;
   artist: string;
   albumImgUrl: string;
 }
 
-const basic = Buffer.from(
-  `${spotifyConfig.CLIENT_ID}:${spotifyConfig.CLIENT_SECRET}`
-).toString('base64');
+const basic = btoa(`${spotifyConfig.CLIENT_ID}:${spotifyConfig.CLIENT_SECRET}`);
 
 const getAccessToken = async (): Promise<string> => {
   const payload = new URLSearchParams({
@@ -31,66 +53,88 @@ const getAccessToken = async (): Promise<string> => {
     body: payload.toString()
   });
 
+  if (!response.ok) {
+    throw new Error(`Spotify auth failed: ${response.status}`);
+  }
+
   const data: SpotifyAuthToken = await response.json();
+
+  if (!data.access_token) {
+    throw new Error('No access token in Spotify response');
+  }
 
   return data.access_token;
 };
 
-export const getNowPlaying = async (): Promise<null | SpotifyApi.CurrentlyPlayingResponse> => {
-  const accessToken = await getAccessToken();
+export const getNowPlaying =
+  async (): Promise<SpotifyCurrentlyPlaying | null> => {
+    const accessToken = await getAccessToken();
 
-  const response = await fetch(spotifyConfig.NOW_PLAYING_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`
+    const response = await fetch(spotifyConfig.NOW_PLAYING_ENDPOINT, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (response.status === 204 || response.status >= 400) {
+      return null;
     }
-  });
 
-  if (response.status !== 200) {
-    return null;
-  }
-
-  const data = await response.json();
-
-  return data;
-};
+    return response.json();
+  };
 
 export const parseTrack = (
-  playingNowData: SpotifyApi.CurrentlyPlayingResponse
-): null | SpotifyTrackInfo => {
-  if (!playingNowData) {
+  playingNowData: SpotifyCurrentlyPlaying | null
+): SpotifyTrackInfo | null => {
+  if (!playingNowData?.item) {
     return null;
   }
 
   const {
     item,
     is_playing: isPlaying,
-    currently_playing_type: currentlyPlayingType
+    currently_playing_type: type
   } = playingNowData;
 
-  if (currentlyPlayingType === 'track') {
-    const itemTrack = item as SpotifyApi.TrackObjectFull;
+  if (type === 'track') {
+    const track = item as SpotifyTrack;
     return {
       isPlaying,
-      title: itemTrack.name,
-      artist: itemTrack.artists.map(artist => artist.name).join(', '),
-      albumImgUrl: itemTrack.album.images[0].url
+      title: track.name,
+      artist: track.artists.map(a => a.name).join(', '),
+      albumImgUrl: track.album.images[0]?.url
     };
-  } else if (currentlyPlayingType === 'episode') {
-    const itemEpisode = item as SpotifyApi.EpisodeObjectFull;
-    return {
-      isPlaying,
-      title: itemEpisode.name,
-      artist: itemEpisode.show.publisher + ' (' + itemEpisode.show.name + ')',
-      albumImgUrl: itemEpisode.images[0].url
-    };
-  } else {
-    return null;
   }
+
+  if (type === 'episode') {
+    const episode = item as SpotifyEpisode;
+    return {
+      isPlaying,
+      title: episode.name,
+      artist: `${episode.show.publisher} (${episode.show.name})`,
+      albumImgUrl: episode.images[0]?.url
+    };
+  }
+
+  return null;
 };
 
-export const getImgBase64 = async (url: string): Promise<string> => {
-  const res = await fetch(url);
-  const buff = await res.arrayBuffer();
+const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+};
 
-  return Buffer.from(buff).toString('base64');
+export const getImgBase64 = async (url: string): Promise<string | null> => {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const buff = await res.arrayBuffer();
+    return arrayBufferToBase64(buff);
+  } catch {
+    return null;
+  }
 };
