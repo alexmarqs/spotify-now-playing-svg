@@ -33,7 +33,7 @@ export interface SpotifyTrackInfo {
   isPlaying: boolean;
   title: string;
   artist: string;
-  albumImgUrl: string;
+  albumImgUrl?: string;
 }
 
 const basic = btoa(`${spotifyConfig.CLIENT_ID}:${spotifyConfig.CLIENT_SECRET}`);
@@ -76,7 +76,15 @@ export const getNowPlaying =
       }
     });
 
-    if (response.status === 204 || response.status >= 400) {
+    if (response.status === 204) {
+      return null;
+    }
+
+    if (response.status >= 400) {
+      console.error(
+        `Spotify now-playing failed: ${response.status}`,
+        await response.text().catch(() => '')
+      );
       return null;
     }
 
